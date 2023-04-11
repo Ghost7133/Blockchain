@@ -1,0 +1,37 @@
+//SPDX-License_Identifier: GPL-3.0
+pragma solidity >=0.7.0;
+
+contract Seller{
+
+    struct House{
+        address owner;
+        uint square;
+        uint year;
+    }
+    
+    House[] public massiveOfHouse;
+    address admin = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
+
+    constructor(){
+        massiveOfHouse.push(House(0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2,50,7));
+    }
+    function addHouse(address _owner,uint _square, uint _year) public {
+        require(admin == msg.sender,"Not admin" );
+        massiveOfHouse.push(House(_owner,_square,_year));
+    }
+    struct sell{
+        address owner;
+        uint count;
+    }
+
+    sell[] public sellhouse;
+
+    function housesForsSale(uint _houseId,uint _count) public {
+        require(msg.sender == massiveOfHouse[_houseId].owner,"You are not the owner");
+        sellhouse.push(sell(msg.sender,_count**18));
+    }
+
+    function payForHouse() public payable{
+        require(msg.value>0);
+    }
+}
