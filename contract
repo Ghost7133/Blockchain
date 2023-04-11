@@ -11,7 +11,8 @@ contract Seller{
     
     House[] public massiveOfHouse;
     address admin = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
-    address buyer = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
+    address buyer = 0x0000000000000000000000000000000000000000;
+    bool statusOfPayed = false;
     constructor(){
         massiveOfHouse.push(House(0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2,50,7));
     }
@@ -43,6 +44,7 @@ contract Seller{
     if (sellhouse[_houseId].status == true){
         require(msg.value == sellhouse[_houseId].count);
         buyer = msg.sender;
+        statusOfPayed = true;
     }
     else {
         payable(msg.sender).transfer(msg.value);
@@ -51,8 +53,10 @@ contract Seller{
     }
     function confirm(uint _houseId) public payable {
         require(msg.sender == massiveOfHouse[_houseId].owner,"You are not the owner");
-        // payable(this.Balance).tranfer(msg.sender);
+        require(statusOfPayed,"Money not received");
+        payable(msg.sender).transfer(sellhouse[_houseId].count);
         sellhouse[_houseId].owner = buyer;
         sellhouse[_houseId].status = false;
+        statusOfPayed = false;
     }
-}   
+}  
