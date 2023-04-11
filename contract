@@ -22,16 +22,30 @@ contract Seller{
     struct sell{
         address owner;
         uint count;
+        bool status;
     }
 
     sell[] public sellhouse;
 
     function housesForsSale(uint _houseId,uint _count) public {
         require(msg.sender == massiveOfHouse[_houseId].owner,"You are not the owner");
-        sellhouse.push(sell(msg.sender,_count**18));
+        sellhouse.push(sell(msg.sender,_count*10**18,true));
     }
-
+    function cancelSale (uint _houseId) public {
+        require(msg.sender == massiveOfHouse[_houseId].owner,"You are not the owner");
+        sellhouse[_houseId].status = false;
+    }
+    function confirmSale(uint _houseId) public {
+        require(msg.sender == massiveOfHouse[_houseId].owner,"You are not the owner");
+        sellhouse[_houseId].status = true;
+    }
     function payForHouse(uint _idHouse) public payable{
+    if (sellhouse[_idHouse].status == true){
         require(msg.value == sellhouse[_idHouse].count);
+    }
+    else {
+        payable(msg.sender).transfer(msg.value);
+        revert('');
+        }
     }
 }   
