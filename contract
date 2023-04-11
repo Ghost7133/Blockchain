@@ -31,7 +31,7 @@ contract Seller{
         sellhouse.push(sell(msg.sender,_count**18));
     }
 
-    function payForHouse() public payable{
-        require(msg.value>0);
+    function payForHouse(uint _idHouse) public payable{
+        require(msg.value == sellhouse[_idHouse].count);
     }
-}
+}   
