@@ -1,0 +1,24 @@
+// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity >=0.7.0;
+pragma experimental ABIEncoderV2;
+
+contract sellApartament {
+
+    struct apartment {
+        address owner;
+        uint square;
+        uint year;
+    }
+    apartment[] public arrayofHouse;
+    address admin = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
+
+    constructor(){
+        arrayofHouse.push(apartment(0x5B38Da6a701c568545dCfcB03FcB875f56beddC4, 50, 7));
+    }
+
+    function sellApartment(address _owner, uint _square, uint _year) public {
+        require(admin == 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4, "not an admin");
+        arrayofHouse.push(apartment(_owner,_square,_year));
+    }
+}
