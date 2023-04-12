@@ -59,4 +59,67 @@ contract Seller{
         sellhouse[_houseId].status = false;
         statusOfPayed = false;
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//SPDX-License_Identifier: GPL-3.0
+pragma solidity >=0.7.0;
+
+contract Seller{
+
+    struct House{
+        address owner;
+        uint square;
+        uint year;
+    }
+    
+    House[] public massiveOfHouse;
+    address admin = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
+    address buyer = 0x0000000000000000000000000000000000000000;
+    bool statusOfPayed = false;
+    constructor(){
+        massiveOfHouse.push(House(0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2,50,7));
+    }
+    function addHouse(address _owner,uint _square, uint _year) public {
+        require(admin == msg.sender,"Not admin" );
+        massiveOfHouse.push(House(_owner,_square,_year));
+    }
+    struct sell{
+        address owner;
+        uint count;
+        bool status;
+        bool closed;
+    }
+
+    sell[] public sellhouse;
+
+    function housesForsSale(uint _houseId,uint _count) public {
+        require(msg.sender == massiveOfHouse[_houseId].owner,"You are not the owner");
+        sellhouse.push(sell(msg.sender,_count*10**18,true,false));
+    }
+    function cancelSale (uint _houseId) public {
+        require(msg.sender == massiveOfHouse[_houseId].owner,"You are not the owner");
+        sellhouse[_houseId].status = false;
+        sellhouse[_houseId].closed = true;
+    }
+    function payForHouse(uint _houseId) public payable{
+    if (sellhouse[_houseId].closed == false){
+        require(msg.value == sellhouse[_houseId].count);
+        buyer = msg.sender;
+        statusOfPayed = true;
+    }
+    else {
+        payable(msg.sender).transfer(msg.value);
+        revert('');
+        }
+    }
+    function confirm(uint _houseId) public payable {
+        require(msg.sender == massiveOfHouse[_houseId].owner,"You are not the owner");
+        require(statusOfPayed,"Money not received");
+        payable(msg.sender).transfer(sellhouse[_houseId].count);
+        sellhouse[_houseId].owner = buyer;
+        sellhouse[_houseId].status = false;
+        statusOfPayed = false;
+    }
 }  
+
