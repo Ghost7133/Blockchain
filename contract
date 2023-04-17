@@ -8,7 +8,6 @@ contract Seller{
         uint square;
         uint year;
     }
-    
     House[] public massiveOfHouse;
     address admin = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
     address buyer = 0x0000000000000000000000000000000000000000;
@@ -32,8 +31,7 @@ contract Seller{
     function housesForsSale(uint _houseId,uint _count) public {
         require(msg.sender == massiveOfHouse[_houseId].owner,"You are not the owner");
         sellhouse.push(sell(msg.sender,_count*10**18,true,false,address(0)));
-        uint house = _houseId
-
+        uint _idHouse = _houseId;
     }
     function cancelSale (uint _houseId) public payable{
         require(msg.sender == massiveOfHouse[_houseId].owner,"You are not the owner");
@@ -57,16 +55,16 @@ contract Seller{
         }
     }
     function confirm(uint _houseId) public payable {
-        require(msg.sender == massiveOfHouse[house].owner,"You are not the owner");
+        require(msg.sender == massiveOfHouse[_houseId].owner,"You are not the owner");
         require(sellhouse[_houseId].Pay,"Money not received");
         payable(msg.sender).transfer(sellhouse[_houseId].count);
         sellhouse[_houseId].owner = sellhouse[_houseId].buyer;
-        massiveOfHouse[House].owner == sellhouse[_houseId].buyer;
         sellhouse[_houseId].status = false;
         sellhouse[_houseId].Pay = false;
-        
+        massiveOfHouse[_idHouse].owner = sellhouse[_idHouse].buyer;
     }
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //SPDX-License_Identifier: GPL-3.0
 pragma solidity >=0.7.0;
