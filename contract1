@@ -1,0 +1,88 @@
+//SPDX-License_Identifier: GPL-3.0
+pragma solidity >=0.8.0;
+
+contract RealtyOwnership {
+    struct Property {
+        address owner;
+        uint area;
+        uint duration;
+        bool forSale;
+        uint salePrice;
+    }
+    
+    Property public property;
+    address public admin  = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
+    address public owner;
+    address public buyer;
+
+    constructor() {
+        admin = msg.sender;
+        property = Property({
+            owner: 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2,
+            area: 50,
+            duration: 7,
+            forSale: false,
+            salePrice: 0
+        });
+    }
+    
+    modifier onlyAdmin() {
+        require(msg.sender == admin, "Only admin can call this function");
+        _;
+    }
+    
+    modifier onlyOwner() {
+        require(msg.sender == property.owner, "Only the property owner can call this function");
+        _;
+    }
+
+    // Функция создания предложения продажи недвижимости
+    function createSale(uint salePrice) public onlyOwner {
+        require(!property.forSale, "Property is already for sale");
+        property.forSale = true;
+        property.salePrice = salePrice;
+    }
+    
+    // Функция отмены продажи недвижимости
+    function cancelSale() public onlyOwner {
+        require(property.forSale, "Property is not for sale");
+        property.forSale = false;
+        property.salePrice = 0;
+    }
+    
+    // Функция подтверждения получения средств продавцом
+    function confirmSale() public onlyOwner payable {
+        require(property.forSale, "Property is not for sale");
+        require(property.salePrice > 0, "Sale price is not set");
+        
+        uint salePrice = property.salePrice;
+        property.salePrice = 0;
+        property.forSale = false;
+        payable(property.owner).transfer(salePrice);
+        property.owner = buyer;
+    }
+    
+    // Функция возврата средств отправителю, если продавец отказывается от продажи
+    function refund() public onlyOwner {
+        require(property.forSale, "Property is not for sale");
+        require(property.salePrice > 0, "Sale price is not set");
+        
+        uint salePrice = property.salePrice;
+        property.salePrice = 0;
+        property.forSale = false;
+        payable(msg.sender).transfer(salePrice);
+    }
+
+    // Функция оплаты за дом
+   function buyProperty() public payable {
+    require(msg.value >= property.salePrice, "Insufficient funds");
+    require(property.forSale, "Property is not for sale");
+
+    uint salePrice = property.salePrice;
+    property.salePrice = 0;
+    property.forSale = false;
+    payable(property.owner).transfer(salePrice);
+    buyer = msg.sender;
+    }
+
+}
