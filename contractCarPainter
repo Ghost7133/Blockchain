@@ -1,0 +1,78 @@
+//SPDX-License-Identifier: GPL-3.0
+pragma solidity >=0.8.0;
+
+contract CarPaintingService {
+    struct Car {
+        address owner;
+        uint estimatedCost;
+        uint actualCost;
+        bool forPainting;
+        bool isPainted;
+    }
+    
+    Car[] public cars;
+    address public owner;
+    address public painter = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
+    
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only the owner can call this function");
+        _;
+    }
+    
+    modifier onlyPainter() {
+        require(msg.sender == painter, "Only the painter can call this function");
+        _;
+    }
+
+    //Добавление нового автомобиля в список
+    function addCar() public {
+        cars.push(Car({
+            owner: msg.sender,
+            estimatedCost: 0,
+            actualCost: 0,
+            forPainting: false,
+            isPainted: false
+        }));
+    }
+    
+    //Оценка стоимости покраски автомобиля
+    function estimateCost(uint carIndex, uint cost) public onlyPainter {
+        require(!cars[carIndex].isPainted, "Car is already painted");
+        require(cars[carIndex].owner != address(0), "Car does not exist");
+        cars[carIndex].estimatedCost = cost;
+        cars[carIndex].forPainting = true;
+    }
+    
+    //Подтверждение покраски автомобиля владельцем
+    function confirmPainting(uint carIndex) public payable {
+        require(cars[carIndex].forPainting, "Car is not for painting");
+        require(cars[carIndex].owner == msg.sender, "You are not the owner of the car");
+        require(msg.value >= cars[carIndex].estimatedCost, "Insufficient funds for painting");
+
+        cars[carIndex].actualCost = msg.value;
+        cars[carIndex].forPainting = false;
+        cars[carIndex].isPainted = true;
+    }
+    
+    //Отмена покраски автомобиля владельцем
+    function cancelPainting(uint carIndex) public {
+        require(cars[carIndex].forPainting, "Car is not for painting");
+        require(cars[carIndex].owner == msg.sender, "You are not the owner of the car");
+        
+        cars[carIndex].estimatedCost = 0;
+        cars[carIndex].forPainting = false;
+    }
+    
+    //Отказ от покраски автомобиля владельцем
+    function refusePainting(uint carIndex) public onlyOwner {
+        require(cars[carIndex].forPainting, "Car is not for painting");
+        
+        cars[carIndex].estimatedCost = 0;
+        cars[carIndex].forPainting = false;
+    }
+
+    //Получение списка всех автомобилей
+    function getAllCars() public view returns (Car[] memory) {
+        return cars;
+    }
+} 
