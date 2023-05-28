@@ -1,0 +1,36 @@
+//SPDX-License_Identifier: GPL-3.0
+pragma solidity >=0.7.0;
+
+contract Estates{
+
+    struct Apartment{
+        uint _id;
+        address _owner;
+        string _info;
+        uint _square;
+        uint _usefulSquare;
+    }
+
+    Apartment[] public Apartments;
+
+    address admin = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
+
+    constructor() {
+        Apartments.push(Apartment(0,0x5B38Da6a701c568545dCfcB03FcB875f56beddC4,"Chehova 2",150,130));
+        Apartments.push(Apartment(1,0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2,"Frunze 9",70,60));
+    }
+
+    function _addApartments(uint _id,address _owner,string memory _info,uint _square,uint _usefulSquare) public  {
+        require(admin == msg.sender,"Not admin" );
+        Apartments.push(Apartment(_id,_owner,_info,_square,_usefulSquare));
+    }
+
+    function _LenOfMassive() public view returns(uint){
+        return Apartments.length;
+    }
+
+    function _getApartmentById(uint _Id) public view returns(uint,address,string memory,uint,uint){
+       return (Apartments[_Id]._id,Apartments[_Id]._owner,Apartments[_Id]._info,Apartments[_Id]._square,Apartments[_Id]._usefulSquare);
+    }
+
+}
