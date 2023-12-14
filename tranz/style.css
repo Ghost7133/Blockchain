@@ -1,0 +1,94 @@
+/* Общие стили */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Стили для основных блоков */
+  .current_account {
+    font-size: 1em;
+    color: #666;
+    margin: 20px 0;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  
+  .account, .balance, .offer_container, .transactions {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #fafafa;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .account, .balance {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  
+  .offer_container, .transactions {
+    border-radius: 10px;
+    box-sizing: border-box;
+  }
+  
+  /* Стили для блока создания предложения и транзакций */
+  .offer_container input,
+  .offer_container select,
+  .transactions .transactions_container {
+    width: calc(100% - 40px);
+    margin-bottom: 20px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .offer_container .create_offer_btn {
+    width: calc(100% - 40px);
+    padding: 12px;
+    background-color: #2ecc71;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 20px;
+  }
+  
+  .accounts_list {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .accounts_list::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 15px;
+    pointer-events: none;
+  }
+  
+  .balance span {
+    font-size: 1em;
+    color: #555;
+    margin-top: 20px;
+  }
+  

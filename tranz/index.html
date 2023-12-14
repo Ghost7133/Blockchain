@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Переводы</title>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="account">
+      <span >Текущий аккаунт</span>
+      <span class="current_account"></span>
+
+    </div>
+    
+    <div class="balance">
+      <span>Баланс: </span>
+      <span class="balance_account"></span>
+    </div>
+    <div class="accounts">
+      <span id="select">Выберите аккаунт:</span>
+      <select class="accounts_list"></select>
+    </div>
+  </div>
+
+  <div class="offer_container">
+    <input type="text" id="" placeholder="Адрес получателя" class="somebody_address" required />
+
+    <input type="number" placeholder="Сумма" class="amount" required />
+
+    <input type="password" placeholder="Секретный ключ" class="secret_key" required />
+
+    <p>Комиссия</p>
+    <select>
+      <option id="0">Отправитель</option>
+      <option id="1">Получатель</option>
+    </select>
+
+    <button class="create_offer_btn">Создать перевод</button>
+  </div>
+  <hr />
+  <div class="transactions">
+    <div class="transactions_list">
+      <span>Список транзакций:</span>
+      <div class="transactions_container">
+
+      </div>
+    </div>
+  </div>
+
+  <script src="web3.min.js"></script>
+  <script src="app.js" type="module"></script>
+</body>
+
+</html>
